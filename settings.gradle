@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "Architecture components - hilt"
+rootProject.name = "Architecture Components"

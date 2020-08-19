@@ -1,17 +1,20 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+apply plugin: "kotlin-kapt"
+apply plugin: "dagger.hilt.android.plugin"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.emreakcadag.architecturecomponents_hilt"
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        buildConfigField 'String', 'BASE_URL', "\"http://192.168.1.104:3000/\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -19,19 +22,71 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    buildFeatures {
+        dataBinding = true
     }
 }
 
 dependencies {
+
+    def hiltVersion = "2.28.3-alpha"
+    def lifecycleVersion = "2.2.0"
+    def retrofitVersion = "2.9.0"
+    def navigationVersion = "2.3.0"
+    def okHttpVersion = "4.7.2"
+    def gsonVersion = "2.8.6"
+    def coroutinesVersion = "1.3.7"
+    def jetpackVersion = "1.0.0-alpha02"
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation "androidx.core:core-ktx:1.3.1"
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
+    testImplementation "junit:junit:4.13"
+    androidTestImplementation "androidx.test.ext:junit:1.1.1"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
+
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$jetpackVersion"
+    kapt "androidx.hilt:hilt-compiler:$jetpackVersion"
+    kaptAndroidTest "androidx.hilt:hilt-compiler:$jetpackVersion"
+
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+
+    // Gson
+    implementation "com.google.code.gson:gson:$gsonVersion"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
 }
