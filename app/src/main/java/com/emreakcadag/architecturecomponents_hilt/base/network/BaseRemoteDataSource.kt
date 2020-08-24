@@ -1,6 +1,7 @@
 package com.emreakcadag.architecturecomponents_hilt.base.network
 
 import com.emreakcadag.architecturecomponents_hilt.base.extension.logDebug
+import com.emreakcadag.architecturecomponents_hilt.base.extension.tryCatch
 import retrofit2.Response
 import java.io.IOException
 
@@ -27,8 +28,8 @@ open class BaseRemoteDataSource {
         call: suspend () -> Response<T?>,
         errorMessage: String?
     ): BaseResult<T?> {
-        val response = call()
-        if (response.isSuccessful) return BaseResult.Success(response.body())
+        val response = tryCatch({ call() })
+        if (response?.isSuccessful == true) return BaseResult.Success(response.body())
 
         return BaseResult.Error(IOException("Hataaa - $errorMessage"))
     }

@@ -94,7 +94,7 @@ class BaseNetworkInterceptor @Inject constructor(
                 /**
                  * End of request
                  */
-                log(END_OF_REQUEST, LOG_DIVIDER, getRequestNumber(response?.request?.url))
+                log(END_OF_REQUEST, LOG_DIVIDER, getRequestNumber(response?.request?.url ?: request.url))
 
                 response ?: chain.proceed(request)
             }
