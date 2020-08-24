@@ -15,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(R.layout.activity_main) {
 
     companion object {
-        fun newIntent(context: Context) = Intent(context, this::class.java)
+        fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +23,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(R.layout.a
 
         binding.run {
             btnSendRequest.setOnClickListener {
-                viewModel?.getMainData(MainRequest(swDialogBox.isChecked))
+                viewModel?.getMainData(MainRequest(swDialogBox.isChecked, swIsCancelable.isChecked))
             }
         }
 

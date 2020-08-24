@@ -1,18 +1,25 @@
 package com.emreakcadag.architecturecomponents_hilt.base.network
 
-import android.util.Log
+import com.emreakcadag.architecturecomponents_hilt.base.extension.dialogBoxChecker
+import com.emreakcadag.architecturecomponents_hilt.base.extension.logDebug
 import com.emreakcadag.architecturecomponents_hilt.base.extension.tryCatch
+import com.emreakcadag.architecturecomponents_hilt.base.network.util.DialogBoxHandler
+import com.google.gson.Gson
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
 import okio.Buffer
 import java.io.EOFException
 import java.nio.charset.Charset
+import javax.inject.Inject
 
 /**
  * Created by Emre Akcadag on 8.08.2020
  */
-class BaseNetworkLogger : Interceptor {
+class BaseNetworkInterceptor @Inject constructor(
+    private val gson: Gson,
+    private val dialogBoxHandler: DialogBoxHandler
+) : Interceptor {
 
     private val requestUrlList = mutableListOf<String>()
 
@@ -77,7 +84,11 @@ class BaseNetworkLogger : Interceptor {
                     /**
                      * Logs response body
                      */
-                    log(RESPONSE_BODY, source?.buffer?.clone()?.readString(responseCharset), getRequestNumber(response?.request?.url))
+                    val resBody = source?.buffer?.clone()?.readString(responseCharset)
+                    log(RESPONSE_BODY, resBody, getRequestNumber(response?.request?.url))
+
+                    // todo emreakcadag prod implementation
+                    showDialogIfExist(resBody)
                 }
 
                 /**
@@ -90,12 +101,22 @@ class BaseNetworkLogger : Interceptor {
         }
     }
 
+    private fun showDialogIfExist(resBody: String?) {
+        tryCatch({
+            val baseResponse = gson.fromJson(resBody, BaseResponse::class.java)
+
+            if (baseResponse.dialogBoxChecker()) {
+                dialogBoxHandler.showDialogBox((baseResponse)?.dialogBox)
+            }
+        })
+    }
+
     /**
      * Logs as info type
      */
     private fun log(detailedTag: String? = null, message: String? = null, requestNumber: Int? = -1) {
         val tag = if (detailedTag != null) "${LOG_TAG}_${requestNumber}_$detailedTag" else "${LOG_TAG}_${requestNumber}"
-        message?.let { Log.i(tag, it) }
+        message?.let { logDebug(it, tag) }
     }
 
     private fun setRequestUrlList(url: HttpUrl?) = url?.run {

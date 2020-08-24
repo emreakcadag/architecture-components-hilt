@@ -4,11 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import com.emreakcadag.architecturecomponents_hilt.feature.main.ui.MainActivity
+import javax.inject.Inject
 
 /**
  * Created by Emre Akçadağ on 15.08.2020
  */
-class Navigator {
+class Navigator @Inject constructor() {
 
     private fun Context?.openActivity(intent: Intent?, requestCode: RequestCode? = null) =
         this?.takeIf { intent != null }?.run {

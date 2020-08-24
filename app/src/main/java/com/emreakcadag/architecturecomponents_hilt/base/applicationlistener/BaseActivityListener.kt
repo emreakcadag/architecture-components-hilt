@@ -6,13 +6,14 @@ import android.content.Context
 import android.os.Bundle
 import com.emreakcadag.architecturecomponents_hilt.base.extension.logDebug
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by Emre Akçadağ on 15.08.2020
  */
-class BaseActivityListener : Application.ActivityLifecycleCallbacks, CurrentActivityListener {
+class BaseActivityListener @Inject constructor() : Application.ActivityLifecycleCallbacks {
 
-    override var currentActivity: Activity? = null
+    var currentActivity: Activity? = null
     var context: Context? = null
     private var currentActivityStack: MutableList<Activity> = ArrayList()
 
@@ -24,11 +25,6 @@ class BaseActivityListener : Application.ActivityLifecycleCallbacks, CurrentActi
         logDebug("${activity::class.simpleName} onActivityCreated")
     }
 
-    /*
-     * Check if the activity of the given class is running
-     * @param activityClass
-     * @return true if running
-     */
     fun isActivityRunning(activityClass: Class<out Activity>): Boolean {
         for (activity in currentActivityStack) {
             if (activity.javaClass == activityClass) {

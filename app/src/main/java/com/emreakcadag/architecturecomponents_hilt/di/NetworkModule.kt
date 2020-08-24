@@ -1,8 +1,7 @@
 package com.emreakcadag.architecturecomponents_hilt.di
 
 import com.emreakcadag.architecturecomponents_hilt.BuildConfig.BASE_URL
-import com.emreakcadag.architecturecomponents_hilt.base.network.BaseNetworkLogger
-import com.emreakcadag.architecturecomponents_hilt.base.network.BaseRetrofitService
+import com.emreakcadag.architecturecomponents_hilt.base.network.BaseNetworkInterceptor
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -23,20 +22,20 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient() = OkHttpClient.Builder()
-        .addInterceptor(BaseNetworkLogger().apply { setLevel(BaseNetworkLogger.Level.BODY) }) // todo: emreakcadag Düzenle
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
-        .build()
-
-    @Provides
-    @Singleton
     fun provideGson() = Gson()
         .newBuilder()
         .setPrettyPrinting()
         .disableHtmlEscaping()
         .create()
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(baseNetworkInterceptor: BaseNetworkInterceptor) = OkHttpClient.Builder()
+        .addInterceptor(baseNetworkInterceptor.apply { setLevel(BaseNetworkInterceptor.Level.BODY) }) // todo: emreakcadag Düzenle
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .build()
 
     // Burası daha sonra düzenlenecek.
     @Provides
@@ -46,8 +45,4 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl(BASE_URL)
         .build()
-
-    @Provides
-    @Singleton
-    fun provideBaseRetrofitService(retrofit: Retrofit) = BaseRetrofitService(retrofit)
 }

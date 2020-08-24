@@ -1,11 +1,12 @@
 package com.emreakcadag.architecturecomponents_hilt.base.applicationlistener
 
 import android.view.LayoutInflater
+import javax.inject.Inject
 
 /**
  * Created by Emre Akçadağ on 15.08.2020
  */
-class BaseActivityRetriever(baseActivityListener: BaseActivityListener) {
+class BaseActivityRetriever @Inject constructor(baseActivityListener: BaseActivityListener) {
 
     val layoutInflater = LayoutInflater.from(baseActivityListener.currentActivity)
 

@@ -35,19 +35,19 @@ inline fun <T> tryCatch(
 /*
  * Log received message, works only debug mode
  */
-inline fun <reified T> T.logDebug(message: Any?) {
+inline fun <reified T> T.logDebug(message: Any?, logTag: String = "LogDebug: ${this.TAG}", isError: Boolean = false) {
     if (BuildConfig.DEBUG && message != null) {
         tryCatch({
-            Log.d("LogDebug: ${this.TAG}", "$message")
+            if (isError) Log.e(logTag, "$message") else Log.d(logTag, "$message")
         })
     }
 }
-
 
 /*
 * Checks and return true if data contains nonnull DialogBox field
 */
 fun <T> T.dialogBoxChecker(): Boolean {
-    this as BaseResponse
-    return this.dialogBox != null
+    return if (this is BaseResponse) {
+        this.dialogBox != null
+    } else false
 }

@@ -41,11 +41,22 @@
             android:id="@+id/sw_dialog_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dialogBox"
+            android:text="showDialogBox?"
             app:layout_constraintBottom_toBottomOf="@+id/btn_send_request"
             app:layout_constraintEnd_toStartOf="@+id/btn_send_request"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <Switch
+            android:id="@+id/sw_is_cancelable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="IsCancelable dialog?"
+            app:layout_constraintEnd_toEndOf="@+id/sw_dialog_box"
+            app:layout_constraintStart_toStartOf="@+id/sw_dialog_box"
+            app:layout_constraintTop_toBottomOf="@+id/sw_dialog_box"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
